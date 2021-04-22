@@ -8,36 +8,60 @@ import {
 } from 'react-native'
 
 import EmojiConfirm from '../assets/EmojiConfirm.png'
+import EmojiHug from '../assets/EmojiHug.png'
+
 import colors from '../styles/colors'
 import fonts from '../styles/fonts'
 
 import { Button } from '../components/Button'
-import { useNavigation } from '@react-navigation/core'
+import { useNavigation, useRoute } from '@react-navigation/core'
+
+interface Params {
+  title : string,
+  subtitle : string,
+  buttonTitle : string,
+  icon : 'smile' | 'hug',
+  nextScreen : string
+}
+
+const emojis = {
+  hug : EmojiHug,
+  smile : EmojiConfirm
+}
 
 export function Confirmation(){
   const { navigate } = useNavigation()
+  const routes = useRoute()
+
+  const { 
+    title,
+    subtitle,
+    buttonTitle,
+    nextScreen,
+    icon
+  } = routes.params as Params
 
   function handleMoveOn(){
-    navigate('PlantSelect')
+    navigate(nextScreen)
   }
   
   return(
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <Image 
-          source={EmojiConfirm} 
+          source={emojis[icon]} 
           resizeMode="contain"
         />
-        <Text style={styles.title}>Prontinho</Text>
+        <Text style={styles.title}>{title}</Text>
 
         <Text style={styles.subtitle}>
-          Agora vamos começar a cuidas das suas plantinhas com muito cuidado.
+          {subtitle}
         </Text>
 
         <View style={styles.footer}>
           <Button 
             onPress={handleMoveOn}
-            text="Começar" 
+            text={buttonTitle} 
           />
         </View>
       </View>

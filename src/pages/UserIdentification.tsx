@@ -9,7 +9,8 @@ import {
   TouchableWithoutFeedback,
   Platform,
   Image,
-  Keyboard
+  Keyboard,
+  Alert
 } from 'react-native'
 import { Button } from '../components/Button'
 import colors from '../styles/colors'
@@ -17,7 +18,7 @@ import fonts from '../styles/fonts'
 import EmojiTrue from '../assets/EmojiTrue.png'
 import EmojiFalse from '../assets/EmojiFalse.png'
 import { useNavigation } from '@react-navigation/core'
-
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export function UserIdentification(){
   const [ isFocused, setIsFocused ] = useState(false)
@@ -25,7 +26,23 @@ export function UserIdentification(){
   const [ name, setName ] = useState<string>()
   const navigation = useNavigation()
 
-  function handleSubmit(){
+  async function handleSubmit(){
+    if(!name){
+      return Alert.alert("Me diz como chamar você :(")
+    }
+    try{
+      await AsyncStorage.setItem('@plantmanager:user', name)
+      navigation.navigate('Confirmation', {
+        title : 'Prontinho',
+        subtitle : 'Agora vamos começar a cuidar das suas plantinhas com muito cuidado.',
+        buttonTitle : 'Começar',
+        icon: 'smile',
+        nextScreen : 'PlantSelect'
+      })
+    }catch{
+      return Alert.alert("Não foi possível salvar seu nome")
+    }
+
     navigation.navigate('Confirmation')
   }
   function handleInputBlur(){
@@ -39,6 +56,7 @@ export function UserIdentification(){
     setIsFilled(!!value)
     setName(value)
   }
+
   return(
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView 
