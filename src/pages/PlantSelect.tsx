@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, Platform, StyleSheet, Text, View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
@@ -96,6 +96,7 @@ export function PlantSelect(){
   if(loading){
     return <Loading />
   }
+  
   return(
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -146,7 +147,7 @@ export function PlantSelect(){
                 : <></>
               }
             />
-        </View>
+      </View>
     </SafeAreaView>
   )
 }
@@ -154,7 +155,7 @@ export function PlantSelect(){
 const styles = StyleSheet.create({
   container :{
     flex : 1,
-    backgroundColor : colors.background
+    backgroundColor : colors.background,
   },
   header : {
     paddingHorizontal : 30
@@ -186,6 +187,5 @@ const styles = StyleSheet.create({
     justifyContent : 'center',
   },
   contentContainerStyle : {
-    
   }
 })

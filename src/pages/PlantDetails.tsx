@@ -6,7 +6,7 @@ import { format, isBefore } from 'date-fns'
 import DateTimePicker, { Event } from '@react-native-community/datetimepicker'
 
 import { Button } from '../components/Button'
-import { PlantProps, savePlant } from '../libs/storage'
+import { PlantProps, savePlant, updatePlant } from '../libs/storage'
 
 import waterdrop from '../assets/waterdrop.png'
 import fonts from '../styles/fonts'
@@ -17,13 +17,13 @@ interface PlantParams{
   plant : PlantProps
 }
 
-export function PlantSave(){
-  const [ selectedDatetime, setSelectedDatetime ] = useState(new Date())
-  const [ showDatePicker, setShowDatePicker ] = useState(Platform.OS == 'ios')
-  const navigation = useNavigation()
-
+export function PlantDetails(){
   const routes = useRoute()
   const { plant } = routes.params as PlantParams
+
+  const [ selectedDatetime, setSelectedDatetime ] = useState(new Date(plant.dateTimeNotification))
+  const [ showDatePicker, setShowDatePicker ] = useState(Platform.OS == 'ios')
+  const navigation = useNavigation()
 
   function handleChangeTime(event : Event, datetime : Date | undefined){
     if(Platform.OS === "android"){
@@ -44,14 +44,14 @@ export function PlantSave(){
 
   async function handleSave(){
     try{
-      await savePlant({
+      await updatePlant({
         ...plant,
         dateTimeNotification : selectedDatetime
       })
       navigation.navigate('Confirmation', {
         title : 'Tudo certo',
-        subtitle : 'Fique tranquilo que sempre vamos lembrar você de cuidadar da sua plantinha com muito cuidado.',
-        buttonTitle : 'Muito Obrigado :D',
+        subtitle : 'Fique tranquilo, seu horário foi alterado com sucesso, e vamos cuidar da sua plantinha com muito cuidado.',
+        buttonTitle : 'Confirmar :D',
         icon: 'hug',
         nextScreen : 'MyPlants'
       })
@@ -126,7 +126,7 @@ export function PlantSave(){
           }
 
           <Button 
-            text="Cadastrar planta"
+            text="Confirmar"
             onPress={handleSave}
           />
         </View>

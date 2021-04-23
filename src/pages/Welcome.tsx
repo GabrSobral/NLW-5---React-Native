@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   title : {
     fontSize: 32,
     fontFamily : fonts.heading,
-    fontWeight : "bold",
+    
     textAlign :"center",
     lineHeight: 38,
     color : colors.heading,
